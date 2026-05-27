@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroBackground from '../components/HeroBackground.astro';
+---
+
+<BaseLayout 
+  title="About Us | Nationwide Cleaning Services Limited"
+  description="Learn about Nationwide Cleaning Services Limited - your trusted cleaning partner in Stirling and surrounding areas. Professional, reliable, and locally based."
+>
+  <!-- Hero with Background Slideshow -->
+  <section class="relative bg-gradient-to-br from-navy to-navy/95 text-white py-20 overflow-hidden">
+    <HeroBackground />
+    
+    <div class="container mx-auto px-4 lg:px-8 relative z-10">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="font-display text-4xl md:text-5xl font-bold mb-6">About Nationwide Cleaning Services</h1>
+        <p class="text-xl text-gray-200">
+          Your trusted cleaning partner in Stirling and surrounding areas across Scotland.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="py-20 fade-in-section">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="max-w-4xl mx-auto">
+        <!-- Who We Are -->
+        <div class="mb-16">
+          <h2 class="font-display text-3xl font-bold text-navy mb-6">Who We Are</h2>
+          <div class="prose prose-lg max-w-none text-gray-700 space-y-4">
+            <p>
+              Nationwide Cleaning Services Limited is a professional cleaning company based in Stirling, Scotland. We specialize in providing high-quality residential and commercial cleaning services to homes and businesses throughout Stirling and the surrounding areas.
+            </p>
+            <p>
+              Our team is comprised of trained, vetted, and insured cleaning professionals who take pride in delivering exceptional results. We understand that your home or workplace is important to you, and we treat every space with the care and attention it deserves.
+            </p>
+          </div>
+        </div>
+
+        <!-- What We Do -->
+        <div class="mb-16">
+          <h2 class="font-display text-3xl font-bold text-navy mb-6">What We Do</h2>
+          <div class="prose prose-lg max-w-none text-gray-700 space-y-4">
+            <p>
+              We offer a comprehensive range of cleaning services tailored to meet the diverse needs of our clients. Whether you need regular house cleaning to maintain your home, a deep clean for a property move, or ongoing commercial cleaning for your business, we have the expertise and resources to deliver outstanding results.
+            </p>
+            <p>
+              Our services include regular domestic cleaning, end-of-tenancy cleaning, office and warehouse cleaning, carpet and upholstery cleaning, and eco-friendly cleaning options. We work with flexible scheduling to accommodate your requirements, offering weekly, fortnightly, monthly, or one-off cleaning appointments.
+            </p>
+          </div>
+        </div>
+
+        <!-- Our Values -->
+        <div class="mb-16">
+          <h2 class="font-display text-3xl font-bold text-navy mb-6">Our Values</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 card-enhanced fade-in-section">
+              <div class="w-12 h-12 bg-green/10 rounded-lg flex items-center justify-center mb-4 card-icon">
+                <svg class="w-6 h-6 text-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <h3 class="font-display text-xl font-semibold text-navy mb-3">Professionalism</h3>
+              <p class="text-gray-600">
+                Every member of our team is thoroughly trained and vetted. We maintain the highest standards of professionalism in every interaction and every clean.
+              </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 card-enhanced fade-in-section">
+              <div class="w-12 h-12 bg-green/10 rounded-lg flex items-center justify-center mb-4 card-icon">
+                <svg class="w-6 h-6 text-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 class="font-display text-xl font-semibold text-navy mb-3">Reliability</h3>
+              <p class="text-gray-600">
+                We show up on time, every time. You can count on us to deliver consistent, dependable service that fits seamlessly into your schedule.
+              </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 card-enhanced fade-in-section">
+              <div class="w-12 h-12 bg-green/10 rounded-lg flex items-center justify-center mb-4 card-icon">
+                <svg class="w-6 h-6 text-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+              </div>
+              <h3 class="font-display text-xl font-semibold text-navy mb-3">Quality</h3>
+              <p class="text-gray-600">
+                We're not satisfied unless you're delighted. We take pride in our work and go the extra mile to ensure exceptional results every single time.
+              </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 card-enhanced fade-in-section">
+              <div class="w-12 h-12 bg-green/10 rounded-lg flex items-center justify-center mb-4 card-icon">
+                <svg class="w-6 h-6 text-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 class="font-display text-xl font-semibold text-navy mb-3">Sustainability</h3>
+              <p class="text-gray-600">
+                We offer eco-friendly cleaning options and are committed to using methods and products that are safe for your family, pets, and the environment.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Why Choose Us -->
+        <div class="bg-gradient-to-br from-green to-green/90 text-white rounded-2xl p-12 mb-16">
+          <h2 class="font-display text-3xl font-bold mb-6">Why Choose Us?</h2>
+          <ul class="space-y-4 text-lg">
+            <li class="flex items-start gap-3">
+              <svg class="w-6 h-6 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>Locally Based:</strong> We're based in Stirling and proud to serve our local community.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-6 h-6 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>Fully Insured:</strong> Comprehensive insurance coverage for your peace of mind.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-6 h-6 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>Trained Professionals:</strong> All cleaners are thoroughly trained and vetted.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-6 h-6 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>Flexible Scheduling:</strong> We work around your schedule with flexible appointment times.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-6 h-6 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>Competitive Pricing:</strong> Quality cleaning at fair, transparent prices.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center">
+          <h2 class="font-display text-3xl font-bold text-navy mb-6">Ready to Experience the Difference?</h2>
+          <p class="text-lg text-gray-600 mb-8">
+            Get in touch today for a free, no-obligation quote.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/get-a-quote" class="inline-flex items-center justify-center bg-green hover:bg-green/90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all hover:shadow-lg">
+              Get a Free Quote
+            </a>
+            <a href="/contact" class="inline-flex items-center justify-center bg-navy hover:bg-navy/90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all">
+              Contact Us
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

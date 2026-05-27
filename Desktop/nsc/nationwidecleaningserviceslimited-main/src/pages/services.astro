@@ -1,0 +1,316 @@
+---
+import HeroBackground from "../components/HeroBackground.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const SERVICE_PLACEHOLDER = "/images/services/placeholder.jpg";
+
+const services = [
+  {
+    id: "regular-house-cleaning",
+    title: "Regular House Cleaning",
+    description:
+      "Keep your home consistently clean and welcoming with our regular cleaning service. Perfect for busy families and professionals who value a spotless living environment.",
+    image: "/images/services/regular-house-cleaning.jpg",
+    whatIncluded: [
+      "Dusting all surfaces, furniture, and fixtures",
+      "Vacuuming and mopping all floors",
+      "Kitchen cleaning (countertops, appliances, sink)",
+      "Bathroom cleaning and sanitizing",
+      "Emptying bins and replacing liners",
+      "Making beds and tidying rooms",
+    ],
+    idealFor: [
+      "Busy families needing ongoing support",
+      "Professionals with limited cleaning time",
+      "Anyone wanting to maintain a consistently clean home",
+      "Households requiring weekly or fortnightly service",
+    ],
+    icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
+  },
+  {
+    id: "commercial-cleaning",
+    title: "Commercial Cleaning",
+    description:
+      "Maintain a professional, hygienic workspace with our comprehensive commercial cleaning solutions. We serve offices, retail spaces, and other business environments.",
+    image: "/images/services/commercial-cleaning.jpg",
+    whatIncluded: [
+      "Reception and common area cleaning",
+      "Desk and workstation sanitizing",
+      "Floor vacuuming and mopping",
+      "Restroom deep cleaning and restocking",
+      "Kitchen and break room maintenance",
+      "Bin collection and waste disposal",
+    ],
+    idealFor: [
+      "Offices and corporate environments",
+      "Retail stores and showrooms",
+      "Medical and dental practices",
+      "Businesses requiring daily, weekly, or custom schedules",
+    ],
+    icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
+  },
+  {
+    id: "move-in-out-cleaning",
+    title: "Move In / Move Out Cleaning",
+    description:
+      "Comprehensive deep cleaning for property transitions. Whether you're moving in or out, we ensure the property is immaculate and ready for its next chapter.",
+    image: "/images/services/move-in-out-cleaning.jpg",
+    whatIncluded: [
+      "Complete deep clean of all rooms",
+      "Inside cupboards, drawers, and wardrobes",
+      "Appliance cleaning (oven, fridge, etc.)",
+      "Window cleaning (interior)",
+      "Skirting boards and door frames",
+      "Bathroom and kitchen deep sanitizing",
+    ],
+    idealFor: [
+      "Tenants preparing for end-of-tenancy inspections",
+      "Landlords between tenancies",
+      "Homeowners buying or selling property",
+      "Anyone requiring a thorough, move-ready clean",
+    ],
+    icon: "M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4",
+  },
+  {
+    id: "office-warehouse-cleaning",
+    title: "Office & Warehouse Cleaning",
+    description:
+      "Specialized cleaning services for workspaces and industrial environments. We handle everything from office buildings to warehouses and storage facilities.",
+    image: "/images/services/office-warehouse-cleaning.jpg",
+    whatIncluded: [
+      "High-traffic area maintenance",
+      "Industrial floor cleaning and scrubbing",
+      "Loading bay and entrance cleaning",
+      "Restroom and staff area sanitizing",
+      "Dust and debris removal",
+      "Scheduled or on-demand service",
+    ],
+    idealFor: [
+      "Warehouses and distribution centers",
+      "Manufacturing facilities",
+      "Large office complexes",
+      "Industrial and commercial properties",
+    ],
+    icon: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
+  },
+  {
+    id: "carpet-upholstery-cleaning",
+    title: "Carpet & Upholstery Cleaning",
+    description:
+      "Revitalize your carpets, rugs, and upholstered furniture with our professional deep cleaning service. Remove stains, odors, and allergens for a fresher, healthier home.",
+    image: "/images/services/carpet-upholstery-cleaning.jpg",
+    whatIncluded: [
+      "Pre-treatment of stains and high-traffic areas",
+      "Hot water extraction or steam cleaning",
+      "Fabric and upholstery deep cleaning",
+      "Deodorizing and sanitizing",
+      "Fast-drying techniques",
+      "Post-clean inspection",
+    ],
+    idealFor: [
+      "Homes with carpets and rugs",
+      "Properties with upholstered furniture",
+      "Households with pets or children",
+      "Anyone looking to refresh soft furnishings",
+    ],
+    icon: "M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z",
+  },
+  {
+    id: "eco-friendly-cleaning",
+    title: "Eco-Friendly Cleaning",
+    description:
+      "Environmentally conscious cleaning solutions using eco-friendly products and sustainable practices. Enjoy a spotless space while reducing your environmental impact.",
+    image: "/images/services/eco-friendly-cleaning.jpg",
+    whatIncluded: [
+      "Plant-based, biodegradable cleaning products",
+      "Low-VOC and non-toxic solutions",
+      "Microfiber cloths and reusable materials",
+      "Water-efficient cleaning methods",
+      "Same thorough cleaning standards",
+      "Safe for families, pets, and the planet",
+    ],
+    idealFor: [
+      "Eco-conscious households and businesses",
+      "Families with young children or pets",
+      "Individuals with sensitivities or allergies",
+      "Anyone prioritizing sustainability",
+    ],
+    icon: "M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+  },
+];
+---
+
+<BaseLayout
+  title="Our Cleaning Services | Nationwide Cleaning Services Limited"
+  description="Comprehensive cleaning services in Stirling and surrounding areas. Regular house cleaning, commercial cleaning, move in/out, carpet cleaning, and eco-friendly options."
+>
+  <!-- Hero -->
+  <section class="relative bg-gradient-to-br from-navy to-navy/95 text-white py-20 overflow-hidden">
+    <HeroBackground />
+    <div class="container mx-auto px-4 lg:px-8 relative z-10">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="font-display text-4xl md:text-5xl font-bold mb-6">Our Cleaning Services</h1>
+        <p class="text-xl text-gray-200 mb-8">
+          Professional cleaning solutions tailored to your needs. From regular house cleaning to specialized commercial services.
+        </p>
+        <a
+          href="/get-a-quote"
+          class="inline-flex items-center justify-center bg-green hover:bg-green/90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all hover:shadow-lg"
+        >
+          Get a Free Quote
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services List -->
+  <section class="py-20">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="space-y-16">
+        {services.map((service, index) => (
+          <div id={service.id} class="scroll-mt-24 fade-in-section">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              <!-- Left column (image + info) -->
+              <div class={index % 2 === 1 ? "lg:order-2" : ""}>
+                <div class="service-photo mb-8">
+                  <img
+                    src={service.image || SERVICE_PLACEHOLDER}
+                    alt={`${service.title} photo`}
+                    loading="lazy"
+                    onerror={`this.src='${SERVICE_PLACEHOLDER}'`}
+                  />
+                </div>
+
+                <div class="flex items-center gap-4 mb-6">
+                  <div class="w-16 h-16 bg-green/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <svg class="w-8 h-8 text-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={service.icon} />
+                    </svg>
+                  </div>
+                  <h2 class="font-display text-3xl font-bold text-navy">{service.title}</h2>
+                </div>
+
+                <p class="text-lg text-gray-600 mb-8">{service.description}</p>
+
+                <a
+                  href="/get-a-quote"
+                  class="inline-flex items-center justify-center bg-green hover:bg-green/90 text-white px-6 py-3 rounded-lg font-semibold transition-all hover:shadow-lg"
+                >
+                  Request This Service
+                  <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </a>
+              </div>
+
+              <!-- Right column (details) -->
+              <div class={`space-y-6 ${index % 2 === 1 ? "lg:order-1" : ""}`}>
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <h3 class="font-display text-xl font-semibold text-navy mb-4">What's Included</h3>
+                  <ul class="space-y-3">
+                    {service.whatIncluded.map((item) => (
+                      <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span class="text-gray-700">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="bg-green/5 rounded-xl p-6 border border-green/20">
+                  <h3 class="font-display text-xl font-semibold text-navy mb-4">Ideal For</h3>
+                  <ul class="space-y-3">
+                    {service.idealFor.map((item) => (
+                      <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <span class="text-gray-700">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {index < services.length - 1 && <div class="mt-16 border-b border-gray-200"></div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="py-12 bg-gray-50 fade-in-section">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="text-center mb-8">
+        <h2 class="font-display text-2xl font-bold text-navy mb-2">Jump to a Service</h2>
+        <p class="text-gray-600">Quick navigation to specific cleaning services</p>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-3">
+        {services.map((service) => (
+          <a
+            href={`#${service.id}`}
+            class="px-4 py-2 bg-white hover:bg-green hover:text-white border border-gray-200 hover:border-green rounded-lg text-navy font-medium transition-all"
+          >
+            {service.title}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 bg-gradient-to-r from-green to-green/90 text-white fade-in-section">
+    <div class="container mx-auto px-4 lg:px-8 text-center">
+      <h2 class="font-display text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
+      <p class="text-xl mb-10 max-w-2xl mx-auto text-white/90">
+        Contact us today for a free, no-obligation quote. We'll create a cleaning plan that fits your needs and budget.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/get-a-quote"
+          class="inline-flex items-center justify-center bg-white text-green hover:bg-gray-50 px-8 py-4 rounded-lg font-semibold text-lg transition-all hover:shadow-xl"
+        >
+          Get Your Free Quote
+        </a>
+        <a
+          href="tel:07836671796"
+          class="inline-flex items-center justify-center bg-navy hover:bg-navy/90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all"
+        >
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+          Call 07836 671796
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .service-photo {
+      width: 100%;
+      height: 220px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #f3f4f6;
+      border: 1px solid rgba(15, 27, 61, 0.12);
+      box-shadow: 0 10px 26px rgba(15, 27, 61, 0.1);
+    }
+    .service-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.01);
+    }
+    @media (min-width: 1024px) {
+      .service-photo {
+        height: 260px;
+      }
+    }
+  </style>
+</BaseLayout>
