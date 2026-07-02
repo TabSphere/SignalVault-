@@ -49,3 +49,13 @@ coverage/
 
 # Backup of broken home-directory git repo
 .git-backup-home/
+
+# Secrets / keys
+*.key
+*.pem
+*.p12
+*.pfx
+*.secret
+*.credentials
+secrets/
+credentials/
