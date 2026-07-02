@@ -15,7 +15,9 @@ import {
   Pause,
   Volume2,
   Headphones,
-} from 'lucide-react' from 'lucide-react'
+} from 'lucide-react'
+
+import { VoiceCallWidget } from '@/components/VoiceCallWidget'
 
 // ── Font Loading ────────────────────────────────────────────
 function useLoadFonts() {
@@ -668,6 +670,19 @@ function ActiveSignalCard({ signal }: { signal: Signal }) {
           <MiniSparkline color={signal.currentPips && signal.currentPips < 0 ? '#00F0A0' : '#FF3366'} />
         </div>
       )}
+
+      {/* Voice Alert Widget */}
+      <div className="mt-4">
+        <VoiceCallWidget
+          signalId={String(signal.id)}
+          userId="demo-user"
+          signalData={{
+            asset_name: signal.asset,
+            direction: signal.direction || 'BUY',
+            entry_price: signal.entry || 0,
+          }}
+        />
+      </div>
     </motion.div>
   )
 }
