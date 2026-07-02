@@ -25,7 +25,7 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
     if (!supabase) {
       toast({
         title: "Voice Error",
-        description: "Voice features are unavailable until Supabase is configured.",
+        description: "Voice features are currently unavailable. Please try again later.",
         variant: "destructive",
       });
       return;
@@ -63,7 +63,7 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
     if (!supabase) {
       toast({
         title: "Call Failed",
-        description: "Calling is unavailable until Supabase is configured.",
+        description: "Calling is currently unavailable. Please try again later.",
         variant: "destructive",
       });
       return;
