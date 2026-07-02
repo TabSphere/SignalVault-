@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 
@@ -10,7 +10,12 @@ import {
   Crosshair,
   Zap,
   ChevronRight,
-} from 'lucide-react'
+  Phone,
+  Play,
+  Pause,
+  Volume2,
+  Headphones,
+} from 'lucide-react' from 'lucide-react'
 
 // ── Font Loading ────────────────────────────────────────────
 function useLoadFonts() {
@@ -1107,6 +1112,201 @@ function TradingJournal() {
   )
 }
 
+// ── Voice Call Section ────────────────────────────────────
+function VoiceCallSection() {
+  const [calls, setCalls] = useState([
+    {
+      id: '1',
+      asset: 'XAUUSD',
+      status: 'completed',
+      mode: 'tts',
+      recording_url: 'https://example.com/audio1.mp3',
+      transcript: 'SignalVault VIP Alert. Gold. Buy signal...',
+      created_at: '2024-01-15T09:00:00Z',
+    },
+  ])
+  const [isPlaying, setIsPlaying] = useState<string | null>(null)
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [isVip] = useState(true) // TODO: check from auth
+  const [isCalling, setIsCalling] = useState(false)
+
+  const handlePlay = (url: string, id: string) => {
+    if (isPlaying === id) {
+      setIsPlaying(null)
+    } else {
+      setIsPlaying(id)
+      // In real app: new Audio(url).play()
+    }
+  }
+
+  const handleCallMe = async () => {
+    if (!phoneNumber) return
+    setIsCalling(true)
+    // TODO: call edge function
+    setTimeout(() => setIsCalling(false), 3000)
+  }
+
+  return (
+    <section className="w-full bg-[#0A0A0A] py-12">
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, ease: easeOutExpo }}
+          className="flex items-center gap-3 mb-6"
+        >
+          <h3
+            className="text-[clamp(24px,2.5vw,32px)] font-semibold text-[#F0F0F0] leading-[1.2] tracking-[-0.01em]"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            AI Voice Alerts
+          </h3>
+          <span
+            className="text-xs font-medium px-3 py-1 rounded-full"
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              background: 'rgba(0,229,255,0.1)',
+              color: '#00E5FF',
+            }}
+          >
+            VIP
+          </span>
+        </motion.div>
+
+        {!isVip ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="rounded-2xl border border-[#222222] bg-[#111111] p-8 text-center"
+          >
+            <Headphones size={32} className="mx-auto mb-4 text-[#5A5E66]" />
+            <h4 className="text-lg font-semibold text-[#F0F0F0] mb-2">Voice Alerts Available</h4>
+            <p className="text-sm text-[#8A8F98] mb-4">
+              Upgrade to VIP to receive AI voice calls for every signal
+            </p>
+            <a
+              href="/credits"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#00E5FF] to-[#00F0A0] px-6 py-3 text-sm font-semibold text-[#050505] transition-all hover:brightness-110"
+            >
+              <Zap size={14} />
+              Upgrade to VIP
+            </a>
+          </motion.div>
+        ) : (
+          <>
+            {/* Call Me Now */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mb-6 rounded-2xl border border-[#222222] bg-[#111111] p-6"
+            >
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="flex items-center gap-3 flex-1 w-full">
+                  <Phone size={20} className="text-[#00E5FF]" />
+                  <input
+                    type="tel"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    placeholder="+44 7700 900000"
+                    className="flex-1 bg-[#1A1A1A] rounded-xl px-4 py-3 text-sm text-[#F0F0F0] placeholder-[#5A5E66] outline-none focus:ring-1 focus:ring-[#00E5FF]/30"
+                  />
+                </div>
+                <button
+                  onClick={handleCallMe}
+                  disabled={!phoneNumber || isCalling}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00E5FF] to-[#00F0A0] px-6 py-3 text-sm font-semibold text-[#050505] transition-all hover:brightness-110 disabled:opacity-30"
+                >
+                  {isCalling ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      >
+                        <Phone size={14} />
+                      </motion.div>
+                      Calling...
+                    </>
+                  ) : (
+                    <>
+                      <Phone size={14} />
+                      Call Me Now
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="mt-3 text-xs text-[#5A5E66]">
+                Enter your phone number to receive a real AI voice call with your latest signal
+              </p>
+            </motion.div>
+
+            {/* Call History */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <h4 className="text-sm font-medium text-[#5A5E66] mb-3 uppercase tracking-wider">
+                Recent Voice Alerts
+              </h4>
+              <div className="space-y-2">
+                {calls.map((call) => (
+                  <motion.div
+                    key={call.id}
+                    className="flex items-center justify-between rounded-xl border border-[#222222] bg-[#111111] px-4 py-3"
+                    whileHover={{ backgroundColor: '#1A1A1A' }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#00E5FF]/10">
+                        {call.mode === 'call' ? (
+                          <Phone size={14} className="text-[#00E5FF]" />
+                        ) : (
+                          <Volume2 size={14} className="text-[#00E5FF]" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-[#F0F0F0]">{call.asset}</p>
+                        <p className="text-xs text-[#5A5E66]">
+                          {call.mode === 'call' ? 'Phone call' : 'Audio alert'} • {new Date(call.created_at).toLocaleTimeString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {call.recording_url && (
+                        <button
+                          onClick={() => handlePlay(call.recording_url, call.id)}
+                          className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1A1A1A] text-[#00E5FF] transition-all hover:bg-[#00E5FF]/10"
+                        >
+                          {isPlaying === call.id ? <Pause size={14} /> : <Play size={14} />}
+                        </button>
+                      )}
+                      <span
+                        className="text-xs font-medium px-2 py-1 rounded-full"
+                        style={{
+                          background: call.status === 'completed' ? 'rgba(0,240,160,0.08)' : 'rgba(255,215,0,0.08)',
+                          color: call.status === 'completed' ? '#00F0A0' : '#FFD700',
+                        }}
+                      >
+                        {call.status}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </div>
+    </section>
+  )
+}
+
 // ── Compact Footer ──────────────────────────────────────────
 function CompactFooter() {
   return (
@@ -1140,6 +1340,7 @@ export default function Dashboard() {
       <ActiveTrades />
       <TodaySummary />
       <TradingJournal />
+      <VoiceCallSection />
       <CompactFooter />
     </div>
   )

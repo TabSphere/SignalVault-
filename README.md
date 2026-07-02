@@ -306,6 +306,77 @@ curl -X POST https://your-project.supabase.co/functions/v1/generate-signal \
 - Chat widget spring physics
 - Card hover effects and staggered entrances
 
+### AI Voice Alerts (VIP)
+- **TTS Mode**: Generate audio files for in-app playback
+- **Call Mode**: Real phone calls via Twilio + ElevenLabs
+- Play voice alerts directly in the dashboard
+- Call history with playback controls
+- Phone number input for outbound calls
+
+---
+
+## Voice Setup (Optional)
+
+SignalVault supports two voice alert modes:
+
+### Option 1: Text-to-Speech (TTS) — Audio Files
+
+1. **Get ElevenLabs API key**:
+   - Go to https://elevenlabs.io/app/settings/api-keys
+   - Generate a new API key
+   - Copy it to `ELEVENLABS_API_KEY` in Supabase secrets
+
+2. **Choose a voice**:
+   - Go to https://elevenlabs.io/app/voice-library
+   - Pick a professional voice (e.g., "Adam" or "Bella")
+   - Copy the Voice ID to `ELEVENLABS_VOICE_ID` in Supabase secrets
+
+3. **Test TTS**:
+   ```bash
+   curl -X POST https://your-project.supabase.co/functions/v1/ai-voice-call \
+     -H "Authorization: Bearer YOUR_JWT" \
+     -d '{"signalId":"YOUR_SIGNAL_ID","userId":"YOUR_USER_ID","action":"tts"}'
+   ```
+
+### Option 2: Real Phone Calls — Twilio + ElevenLabs
+
+1. **Sign up for Twilio**:
+   - Go to https://www.twilio.com/try-twilio
+   - Verify your account
+
+2. **Buy a phone number**:
+   - In Twilio Console, go to **Phone Numbers** > **Manage** > **Buy a Number**
+   - Choose a number with Voice capability (~$1/month)
+   - Copy the number to `TWILIO_PHONE_NUMBER` (e.g., `+441234567890`)
+
+3. **Get Twilio credentials**:
+   - In Console, go to **Account** > **API keys & tokens**
+   - Copy **Account SID** to `TWILIO_ACCOUNT_SID`
+   - Copy **Auth Token** to `TWILIO_AUTH_TOKEN`
+
+4. **Add to Supabase secrets**:
+   ```bash
+   TWILIO_ACCOUNT_SID=AC...your_account_sid
+   TWILIO_AUTH_TOKEN=...your_auth_token
+   TWILIO_PHONE_NUMBER=+44...your_number
+   ```
+
+5. **Test phone call**:
+   ```bash
+   curl -X POST https://your-project.supabase.co/functions/v1/ai-voice-call \
+     -H "Authorization: Bearer YOUR_JWT" \
+     -d '{"signalId":"YOUR_SIGNAL_ID","userId":"YOUR_USER_ID","action":"call"}'
+   ```
+
+### How It Works
+
+| Mode | Action | Cost | Use Case |
+|------|--------|------|----------|
+| **TTS** | `action: "tts"` | ElevenLabs API cost (~$0.01) | In-app audio playback |
+| **Call** | `action: "call"` | ElevenLabs + Twilio (~$0.02/min) | Real phone call to user |
+
+The voice script includes: asset name, direction (Buy/Sell), entry price, stop loss, take profit, confidence, and timeframe.
+
 ---
 
 ## Legal Compliance
