@@ -22,6 +22,15 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
   const { toast } = useToast();
 
   const handleTTS = async () => {
+    if (!supabase) {
+      toast({
+        title: "Voice Error",
+        description: "Voice features are unavailable until Supabase is configured.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsPlaying(true);
     try {
       const { data, error } = await supabase.functions.invoke("ai-voice-call", {
@@ -51,6 +60,15 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
   };
 
   const handleRealCall = async () => {
+    if (!supabase) {
+      toast({
+        title: "Call Failed",
+        description: "Calling is unavailable until Supabase is configured.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsCalling(true);
     try {
       const { data, error } = await supabase.functions.invoke("voice-call-trigger", {
