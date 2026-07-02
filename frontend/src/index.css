@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 94%;
+    --card: 0 0% 6.7%;
+    --card-foreground: 0 0% 94%;
+    --popover: 0 0% 6.7%;
+    --popover-foreground: 0 0% 94%;
+    --primary: 187 100% 50%;
+    --primary-foreground: 0 0% 2%;
+    --secondary: 0 0% 3.9%;
+    --secondary-foreground: 0 0% 94%;
+    --muted: 0 0% 6.7%;
+    --muted-foreground: 220 5% 55%;
+    --accent: 187 100% 50%;
+    --accent-foreground: 0 0% 2%;
+    --destructive: 345 100% 60%;
+    --destructive-foreground: 0 0% 94%;
+    --border: 0 0% 13.3%;
+    --input: 0 0% 13.3%;
+    --ring: 187 100% 50%;
+    --radius: 0.75rem;
+    --sidebar-background: 0 0% 2%;
+    --sidebar-foreground: 0 0% 94%;
+    --sidebar-primary: 187 100% 50%;
+    --sidebar-primary-foreground: 0 0% 2%;
+    --sidebar-accent: 0 0% 6.7%;
+    --sidebar-accent-foreground: 0 0% 94%;
+    --sidebar-border: 0 0% 13.3%;
+    --sidebar-ring: 187 100% 50%;
+
+    /* SignalVault Design Tokens */
+    --bg-primary: #050505;
+    --bg-secondary: #0A0A0A;
+    --bg-tertiary: #111111;
+    --bg-quaternary: #1A1A1A;
+    --border-subtle: #222222;
+    --border-medium: #333333;
+    --signal-buy: #00F0A0;
+    --signal-sell: #FF3366;
+    --signal-buy-bg: rgba(0, 240, 160, 0.08);
+    --signal-sell-bg: rgba(255, 51, 102, 0.08);
+    --accent-cyan: #00E5FF;
+    --accent-cyan-dim: #00B8CC;
+    --accent-gold: #FFD700;
+    --accent-purple: #8B5CF6;
+    --text-primary: #F0F0F0;
+    --text-secondary: #8A8F98;
+    --text-muted: #5A5E66;
+    --text-inverse: #050505;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-medium);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}

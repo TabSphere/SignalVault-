@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+frontend/dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+frontend/.env*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Supabase
+.supabase/
+
+# Vercel
+.vercel/
+
+# Testing
+coverage/
+
+# Generated audio files (ElevenLabs TTS)
+*.mp3
+*.wav
+
+# Turborepo cache
+.turbo/
+
+# Backup of broken home-directory git repo
+.git-backup-home/
