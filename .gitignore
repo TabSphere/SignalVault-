@@ -9,11 +9,13 @@ dist/
 build/
 out/
 .next/
+frontend/dist/
 
 # Environment variables
 .env
 .env.local
 .env.*.local
+frontend/.env*
 
 # IDE
 .vscode/
@@ -37,3 +39,10 @@ npm-debug.log*
 
 # Testing
 coverage/
+
+# Generated audio files (ElevenLabs TTS)
+*.mp3
+*.wav
+
+# Turborepo cache
+.turbo/
