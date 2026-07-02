@@ -1,13 +1,58 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Zap } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const navLinks = [
   { label: 'Dashboard', path: '/dashboard' },
   { label: 'Signals', path: '/signals' },
   { label: 'Performance', path: '/performance' },
-  { label: 'Pricing', path: '/pricing' },
+  { label: 'Credits', path: '/credits' },
+  { label: 'Referrals', path: '/referrals' },
 ]
+
+function CreditBalance() {
+  const [credits, setCredits] = useState(5)
+  const [isLow, setIsLow] = useState(false)
+  const [isCritical, setIsCritical] = useState(false)
+
+  useEffect(() => {
+    setIsLow(credits > 0 && credits <= 10)
+    setIsCritical(credits <= 3)
+  }, [credits])
+
+  return (
+    <Link to="/credits" className="flex items-center gap-1.5">
+      <motion.div
+        className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-medium transition-all ${
+          isCritical
+            ? 'bg-red-500/10 text-red-400'
+            : isLow
+            ? 'bg-amber-500/10 text-amber-400'
+            : 'bg-[#1A1A1A] text-[#00E5FF]'
+        }`}
+        animate={
+          isCritical
+            ? { x: [0, -3, 3, -3, 3, 0] }
+            : isLow
+            ? { opacity: [1, 0.6, 1] }
+            : {}
+        }
+        transition={
+          isCritical
+            ? { duration: 0.5, repeat: Infinity, repeatDelay: 2 }
+            : isLow
+            ? { duration: 1.5, repeat: Infinity }
+            : {}
+        }
+      >
+        <Zap size={14} className={isCritical ? 'text-red-400' : isLow ? 'text-amber-400' : 'text-[#00E5FF]'} />
+        <span>{credits}</span>
+        <span className="text-[10px] opacity-60">cr</span>
+      </motion.div>
+    </Link>
+  )
+}
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -41,6 +86,7 @@ export default function Navbar() {
 
         {/* Right CTA - Desktop */}
         <div className="hidden items-center gap-4 md:flex">
+          <CreditBalance />
           <Link
             to="/start"
             className="rounded-[6px] bg-gradient-to-r from-[#00E5FF] to-[#00F0A0] px-7 py-3.5 text-[15px] font-semibold text-[#050505] shadow-[0_0_20px_rgba(0,229,255,0.2)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]"

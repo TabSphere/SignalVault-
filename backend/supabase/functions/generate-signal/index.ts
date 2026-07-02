@@ -190,11 +190,11 @@ serve(async (req) => {
       );
     }
 
-    const { asset, plan } = await req.json();
+    const { asset, plan, userId } = await req.json();
 
-    if (!asset) {
+    if (!asset || !userId) {
       return new Response(
-        JSON.stringify({ error: "Asset symbol required (e.g., XAUUSD)" }),
+        JSON.stringify({ error: "Asset symbol and userId required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
