@@ -40,10 +40,10 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
       const audio = new Audio(data.audioUrl);
       audio.play();
       audio.onended = () => setIsPlaying(false);
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Voice Error",
-        description: err.message || "Failed to generate voice alert.",
+        description: err instanceof Error ? err.message : "Failed to generate voice alert.",
         variant: "destructive",
       });
       setIsPlaying(false);
@@ -63,10 +63,10 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
         title: "Call Initiated",
         description: data.message || "Calling your phone now...",
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Call Failed",
-        description: err.message || "Could not place the call. Check your phone number in profile settings.",
+        description: err instanceof Error ? err.message : "Could not place the call. Check your phone number in profile settings.",
         variant: "destructive",
       });
     } finally {

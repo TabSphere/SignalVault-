@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router'
 import { Menu, X, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -13,13 +13,8 @@ const navLinks = [
 
 function CreditBalance() {
   const [credits] = useState(5)
-  const [isLow, setIsLow] = useState(false)
-  const [isCritical, setIsCritical] = useState(false)
-
-  useEffect(() => {
-    setIsLow(credits > 0 && credits <= 10)
-    setIsCritical(credits <= 3)
-  }, [credits])
+  const isLow = useMemo(() => credits > 0 && credits <= 10, [credits])
+  const isCritical = useMemo(() => credits <= 3, [credits])
 
   return (
     <Link to="/credits" className="flex items-center gap-1.5">

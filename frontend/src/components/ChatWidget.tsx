@@ -18,6 +18,12 @@ const QUICK_ACTIONS = [
 
 const SUPPORT_EMAIL = 'info@tabsphere.co.uk'
 
+let messageIdCounter = 0
+const generateMessageId = () => {
+  messageIdCounter += 1
+  return `msg-${messageIdCounter}`
+}
+
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
@@ -53,7 +59,7 @@ export default function ChatWidget() {
     if (!content.trim() || isLoading) return
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: generateMessageId(),
       role: 'user',
       content: content.trim(),
       timestamp: new Date(),
@@ -86,7 +92,7 @@ export default function ChatWidget() {
           setMessages((prev) => [
             ...prev,
             {
-              id: (Date.now() + 1).toString(),
+              id: generateMessageId(),
               role: 'assistant',
               content: `You've run out of credits. [Buy more credits](/credits) to keep chatting.`,
               timestamp: new Date(),
@@ -99,7 +105,7 @@ export default function ChatWidget() {
         setMessages((prev) => [
           ...prev,
           {
-            id: (Date.now() + 1).toString(),
+            id: generateMessageId(),
             role: 'assistant',
             content: data.message,
             timestamp: new Date(),
@@ -109,11 +115,11 @@ export default function ChatWidget() {
           setCredits(data.creditsRemaining)
         }
       }
-    } catch (error) {
+    } catch {
       setMessages((prev) => [
         ...prev,
         {
-          id: (Date.now() + 1).toString(),
+          id: generateMessageId(),
           role: 'assistant',
           content: "I'm having trouble connecting. Please try again or email [info@tabsphere.co.uk](mailto:info@tabsphere.co.uk) for support.",
           timestamp: new Date(),
