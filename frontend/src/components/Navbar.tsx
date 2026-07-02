@@ -12,7 +12,7 @@ const navLinks = [
 ]
 
 function CreditBalance() {
-  const [credits, setCredits] = useState(5)
+  const [credits] = useState(5)
   const [isLow, setIsLow] = useState(false)
   const [isCritical, setIsCritical] = useState(false)
 

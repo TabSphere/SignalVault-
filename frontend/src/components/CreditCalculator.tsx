@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Calculator, Zap, TrendingDown, TrendingUp } from 'lucide-react'
+import { Calculator, TrendingDown, TrendingUp } from 'lucide-react'
 
 const SIGNAL_COSTS = {
   basic: { label: 'Basic (3 cr)', value: 3 },

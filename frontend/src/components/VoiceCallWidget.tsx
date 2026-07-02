@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Phone, PhoneOff, Volume2, Loader2 } from "lucide-react";
+import { Phone, Volume2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";

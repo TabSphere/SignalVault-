@@ -44,9 +44,9 @@ const HOW_IT_WORKS = [
 ]
 
 export default function Referrals() {
-  const [referralCode, setReferralCode] = useState('abc123')
+  const [referralCode] = useState('abc123')
   const [copied, setCopied] = useState(false)
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     clicks: 47,
     signups: 12,
     purchases: 5,

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router'
 import { motion } from 'framer-motion'
-import { Zap, Check, ArrowRight, TrendingUp, Calculator, Gift } from 'lucide-react'
+import { Zap, Check, ArrowRight, TrendingUp, Gift } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import CreditCalculator from '../components/CreditCalculator'
@@ -58,7 +58,7 @@ const features = [
 ]
 
 export default function Credits() {
-  const [balance, setBalance] = useState(5)
+  const [balance] = useState(5)
   const sectionRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<(HTMLDivElement | null)[]>([])

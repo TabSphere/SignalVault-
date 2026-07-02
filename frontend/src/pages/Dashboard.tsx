@@ -1129,7 +1129,7 @@ function TradingJournal() {
 
 // ── Voice Call Section ────────────────────────────────────
 function VoiceCallSection() {
-  const [calls, setCalls] = useState([
+  const [calls] = useState([
     {
       id: '1',
       asset: 'XAUUSD',
@@ -1145,7 +1145,7 @@ function VoiceCallSection() {
   const [isVip] = useState(true) // TODO: check from auth
   const [isCalling, setIsCalling] = useState(false)
 
-  const handlePlay = (url: string, id: string) => {
+  const handlePlay = (_url: string, id: string) => {
     if (isPlaying === id) {
       setIsPlaying(null)
     } else {
