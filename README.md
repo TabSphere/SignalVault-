@@ -212,17 +212,17 @@ supabase functions deploy process-referral
 
 ### Step 6: Deploy Frontend to Vercel
 
+The repository now includes a root-level `vercel.json` that installs and builds the app from `/frontend`, so Vercel can deploy correctly from the repository root.
+
 ```bash
+# Optional local verification
 cd frontend
-
-# Install dependencies
 npm install
-
-# Build for production
 npm run build
 
-# Deploy via Vercel CLI
+# Deploy via Vercel CLI from the repository root
 npm i -g vercel
+cd ..
 vercel --prod
 ```
 
