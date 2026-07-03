@@ -1,0 +1,36 @@
+#!/bin/sh
+# Pre-commit hook: block real-looking secrets from being committed.
+# Keep real keys in .env.local (gitignored), use only placeholders in .env.example.
+
+set -e
+
+# Added lines only (staged changes)
+ADDED=$(git diff --cached --no-color -U0 | grep -E '^\+[^+]' || true)
+
+if [ -z "$ADDED" ]; then
+    exit 0
+fi
+
+# Patterns that match real credentials but NOT the placeholder examples.
+PATTERNS='sk-proj-[A-Za-z0-9_-]{40,}|sk-[a-zA-Z0-9_-]{30,}|sk_live_[a-zA-Z0-9]{24,}|pk_live_[a-zA-Z0-9]{24,}|sk_test_[a-zA-Z0-9]{24,}|pk_test_[a-zA-Z0-9]{24,}|whsec_[a-zA-Z0-9]{24,}|AC[0-9a-f]{32}|[0-9a-f]{32}|eyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}'
+
+MATCHES=$(echo "$ADDED" | grep -E "$PATTERNS" || true)
+
+if [ -n "$MATCHES" ]; then
+    echo 'ERROR: Potential real secret detected in staged changes.' >&2
+    echo 'Do not commit API keys, tokens, or JWTs. Use placeholder values like:' >&2
+    echo '  OPENAI_API_KEY=sk-proj-...your_openai_key_here' >&2
+    echo 'Keep real values in .env.local, which is gitignored.' >&2
+    echo '' >&2
+    echo 'Offending lines:' >&2
+    echo "$MATCHES" >&2
+    exit 1
+fi
+
+# Safety net: refuse any .env.local file that somehow got staged
+STAGED_ENV=$(git diff --cached --name-only | grep -E '^\.env(\.local|\.[^/]*\.local)$' || true)
+if [ -n "$STAGED_ENV" ]; then
+    echo 'ERROR: Do not commit .env.local files:' >&2
+    echo "$STAGED_ENV" >&2
+    exit 1
+fi
