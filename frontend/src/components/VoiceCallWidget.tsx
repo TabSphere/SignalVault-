@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Phone, PhoneOff, Volume2, Loader2 } from "lucide-react";
+import { Phone, Volume2, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 
 interface VoiceCallWidgetProps {
@@ -19,7 +19,6 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
   const [isCalling, setIsCalling] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const { toast } = useToast();
 
   const handleTTS = async () => {
     setIsPlaying(true);
@@ -31,8 +30,7 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
       if (error) throw error;
 
       setAudioUrl(data.audioUrl);
-      toast({
-        title: "Voice Alert Ready",
+      toast("Voice Alert Ready", {
         description: `Audio generated for ${signalData?.asset_name || "signal"}.`,
       });
 
@@ -41,10 +39,8 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
       audio.play();
       audio.onended = () => setIsPlaying(false);
     } catch (err: any) {
-      toast({
-        title: "Voice Error",
+      toast.error("Voice Error", {
         description: err.message || "Failed to generate voice alert.",
-        variant: "destructive",
       });
       setIsPlaying(false);
     }
@@ -59,15 +55,12 @@ export function VoiceCallWidget({ signalId, userId, signalData }: VoiceCallWidge
 
       if (error) throw error;
 
-      toast({
-        title: "Call Initiated",
+      toast("Call Initiated", {
         description: data.message || "Calling your phone now...",
       });
     } catch (err: any) {
-      toast({
-        title: "Call Failed",
+      toast.error("Call Failed", {
         description: err.message || "Could not place the call. Check your phone number in profile settings.",
-        variant: "destructive",
       });
     } finally {
       setIsCalling(false);

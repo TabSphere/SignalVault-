@@ -18,6 +18,15 @@ import {
 } from 'lucide-react'
 
 import { VoiceCallWidget } from '@/components/VoiceCallWidget'
+import {
+  useDashboardData,
+  type Signal,
+  type Position,
+  type JournalEntry,
+  type VoiceCall,
+  type DashboardProfile,
+  type SlotStatus,
+} from '@/hooks/useDashboardData'
 
 // ── Font Loading ────────────────────────────────────────────
 function useLoadFonts() {
@@ -55,151 +64,6 @@ const cardHover = {
   y: -2,
   transition: { duration: 0.3, ease: easeInOut },
 }
-
-// ── Types ───────────────────────────────────────────────────
-type SignalStatus = 'CLOSED' | 'LIVE' | 'UPCOMING'
-type Direction = 'BUY' | 'SELL'
-type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH'
-type SlotStatus = 'DELIVERED' | 'ACTIVE' | 'PENDING'
-
-interface Signal {
-  id: number
-  asset: string
-  status: SignalStatus
-  direction?: Direction
-  entry?: number
-  stop?: number
-  target?: number
-  confidence?: number
-  risk?: RiskLevel
-  countdown?: string
-  result?: string
-  resultType?: 'WIN' | 'LOSS'
-  pips?: number
-  pipsLabel?: string
-  time: string
-  currentPrice?: number
-  currentPips?: number
-}
-
-interface Position {
-  asset: string
-  direction: Direction
-  entry: number
-  current: number
-  pnl: number
-  stop: number
-  target: number
-  time: string
-}
-
-interface JournalEntry {
-  asset: string
-  direction: Direction
-  date: string
-  entry: number
-  exit: number
-  result: 'WIN' | 'LOSS'
-  pnl: number
-}
-
-// ── Mock Data ───────────────────────────────────────────────
-const signals: Signal[] = [
-  {
-    id: 1,
-    asset: 'EUR/USD',
-    status: 'CLOSED',
-    direction: 'BUY',
-    entry: 1.0842,
-    stop: 1.0820,
-    target: 1.0885,
-    time: '09:00',
-    result: 'HIT TARGET',
-    resultType: 'WIN',
-  },
-  {
-    id: 2,
-    asset: 'GBP/JPY',
-    status: 'LIVE',
-    direction: 'SELL',
-    entry: 192.45,
-    stop: 193.10,
-    target: 191.20,
-    confidence: 88,
-    risk: 'MEDIUM',
-    countdown: '23:47 remaining',
-    time: '11:30',
-    currentPrice: 192.38,
-    currentPips: -7,
-    pips: 125,
-    pipsLabel: '-65 pips',
-  },
-  {
-    id: 3,
-    asset: 'BTC/USD',
-    status: 'UPCOMING',
-    time: '14:00',
-    countdown: 'Starts in 2h 14m',
-  },
-  {
-    id: 4,
-    asset: 'XAU/USD',
-    status: 'UPCOMING',
-    time: '16:30',
-    countdown: 'Starts in 4h 44m',
-  },
-  {
-    id: 5,
-    asset: 'USD/CAD',
-    status: 'UPCOMING',
-    time: '19:00',
-    countdown: 'Starts in 7h 14m',
-  },
-]
-
-const timelineSlots = [
-  { time: '09:00', asset: 'EUR/USD', status: 'DELIVERED' as SlotStatus },
-  { time: '11:30', asset: 'GBP/JPY', status: 'ACTIVE' as SlotStatus },
-  { time: '14:00', asset: 'BTC/USD', status: 'PENDING' as SlotStatus },
-  { time: '16:30', asset: 'XAU/USD', status: 'PENDING' as SlotStatus },
-  { time: '19:00', asset: 'USD/CAD', status: 'PENDING' as SlotStatus },
-]
-
-const positions: Position[] = [
-  {
-    asset: 'EUR/USD',
-    direction: 'BUY',
-    entry: 1.0842,
-    current: 1.0871,
-    pnl: 18.40,
-    stop: 1.0820,
-    target: 1.0885,
-    time: '09:12',
-  },
-  {
-    asset: 'GBP/JPY',
-    direction: 'SELL',
-    entry: 192.45,
-    current: 192.38,
-    pnl: 6.20,
-    stop: 193.10,
-    target: 191.20,
-    time: '11:35',
-  },
-]
-
-const journalEntries: JournalEntry[] = [
-  { asset: 'EUR/USD', direction: 'BUY', date: '15 Jan, 09:00', entry: 1.0842, exit: 1.0885, result: 'WIN', pnl: 24.50 },
-  { asset: 'GBP/JPY', direction: 'SELL', date: '14 Jan, 11:30', entry: 192.80, exit: 191.50, result: 'WIN', pnl: 31.20 },
-  { asset: 'BTC/USD', direction: 'BUY', date: '14 Jan, 14:00', entry: 66100, exit: 65800, result: 'LOSS', pnl: -18.40 },
-  { asset: 'XAU/USD', direction: 'BUY', date: '14 Jan, 16:30', entry: 2338, exit: 2351, result: 'WIN', pnl: 28.90 },
-  { asset: 'USD/CAD', direction: 'SELL', date: '13 Jan, 19:00', entry: 1.3710, exit: 1.3650, result: 'WIN', pnl: 22.10 },
-  { asset: 'EUR/GBP', direction: 'BUY', date: '13 Jan, 09:00', entry: 0.8520, exit: 0.8545, result: 'WIN', pnl: 19.80 },
-  { asset: 'AUD/USD', direction: 'SELL', date: '12 Jan, 11:30', entry: 0.6780, exit: 0.6810, result: 'LOSS', pnl: -15.60 },
-  { asset: 'USD/JPY', direction: 'BUY', date: '12 Jan, 14:00', entry: 147.20, exit: 148.10, result: 'WIN', pnl: 26.40 },
-  { asset: 'GBP/USD', direction: 'SELL', date: '11 Jan, 16:30', entry: 1.2750, exit: 1.2680, result: 'WIN', pnl: 29.50 },
-  { asset: 'NAS100', direction: 'BUY', date: '11 Jan, 19:00', entry: 16800, exit: 16750, result: 'LOSS', pnl: -12.30 },
-]
 
 // ── Helpers ─────────────────────────────────────────────────
 function formatPrice(n: number): string {
@@ -246,9 +110,18 @@ function MiniSparkline({ color = '#00F0A0' }: { color?: string }) {
 }
 
 // ── Section 1: Dashboard Header ─────────────────────────────
-function DashboardHeader() {
+function DashboardHeader({
+  profile,
+  timelineSlots,
+}: {
+  profile: DashboardProfile
+  timelineSlots: { time: string; asset: string; status: SlotStatus }[]
+}) {
   const greeting = useGreeting()
   const date = useFormattedDate()
+
+  const planLabel = profile.plan.charAt(0).toUpperCase() + profile.plan.slice(1)
+  const planLimit = profile.plan === 'standard' ? 1 : profile.plan === 'pro' ? 3 : 5
 
   return (
     <section className="w-full bg-[#050505] pt-[96px] pb-8">
@@ -292,13 +165,13 @@ function DashboardHeader() {
               className="text-[clamp(28px,3vw,40px)] font-medium text-[#F0F0F0] leading-none mt-1"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
-              Pro
+              {planLabel}
             </p>
             <p
               className="text-xs text-[#00E5FF] mt-1 flex items-center gap-1"
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
-              3 signals per day
+              {planLimit} signals per day
             </p>
           </motion.div>
         </div>
@@ -459,7 +332,7 @@ function DeliveredSignalCard({ signal }: { signal: Signal }) {
         className="text-xs font-medium tracking-[0.02em] mt-4"
         style={{ fontFamily: "'Inter', sans-serif", color: '#00F0A0' }}
       >
-        Result: HIT TARGET
+        Result: {signal.resultType || 'CLOSED'}
       </p>
     </motion.div>
   )
@@ -739,7 +612,7 @@ function UpcomingSignalCard({ signal }: { signal: Signal }) {
 }
 
 // ── Section 2: Signal Timeline (Main Feed) ──────────────────
-function SignalTimeline() {
+function SignalTimeline({ signals }: { signals: Signal[] }) {
   return (
     <section className="w-full bg-[#050505] py-8 pb-16">
       <div className="max-w-[900px] mx-auto px-6 lg:px-12">
@@ -775,7 +648,7 @@ function SignalTimeline() {
 }
 
 // ── Section 3: Active Trades ────────────────────────────────
-function ActiveTrades() {
+function ActiveTrades({ positions }: { positions: Position[] }) {
   return (
     <section className="w-full bg-[#0A0A0A] py-12">
       <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
@@ -801,7 +674,7 @@ function ActiveTrades() {
               color: '#00E5FF',
             }}
           >
-            2 Open
+            {positions.length} Open
           </span>
         </motion.div>
 
@@ -834,7 +707,7 @@ function ActiveTrades() {
             const isProfit = pos.pnl > 0
             return (
               <motion.div
-                key={pos.asset}
+                key={pos.id || pos.asset}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -906,34 +779,58 @@ function ActiveTrades() {
   )
 }
 
-// ── Section 4: Today's Summary ──────────────────────────────
-function TodaySummary() {
+// ── Section 4: Today&apos;s Summary ──────────────────────────────
+function TodaySummary({
+  signals,
+  journalEntries,
+  profile,
+}: {
+  signals: Signal[]
+  journalEntries: JournalEntry[]
+  profile: DashboardProfile
+}) {
+  const planLimit = profile.plan === 'standard' ? 1 : profile.plan === 'pro' ? 3 : 5
+  const planLabel = profile.plan.charAt(0).toUpperCase() + profile.plan.slice(1)
+
+  const today = new Date()
+  const signalsToday = signals.filter((s) => {
+    const d = new Date(s.createdAt)
+    return (
+      d.getFullYear() === today.getFullYear() &&
+      d.getMonth() === today.getMonth() &&
+      d.getDate() === today.getDate()
+    )
+  }).length
+
+  const totalPnl = journalEntries.reduce((sum, e) => sum + e.pnl, 0)
+  const isProfit = totalPnl >= 0
+
   const stats = [
     {
       icon: <TrendingUp size={24} style={{ color: '#00E5FF' }} />,
-      value: '2/3',
-      label: 'Signals Today (Pro)',
+      value: `${signalsToday}/${planLimit}`,
+      label: `Signals Today (${planLabel})`,
       color: '#F0F0F0',
     },
     {
       icon: <Crosshair size={24} style={{ color: '#00F0A0' }} />,
-      value: '—',
+      value: String(journalEntries.length),
       label: "Your Trading Journal",
       color: '#00F0A0',
     },
     {
-      icon: <ArrowUp size={24} style={{ color: '#00F0A0' }} />,
-      value: 'Track',
+      icon: <ArrowUp size={24} style={{ color: isProfit ? '#00F0A0' : '#FF3366' }} />,
+      value: `${isProfit ? '+' : ''}£${Math.abs(totalPnl).toFixed(2)}`,
       label: "Your Own Results",
-      color: '#00F0A0',
+      color: isProfit ? '#00F0A0' : '#FF3366',
       delta: 'All P&L is your own',
     },
     {
       icon: <Zap size={24} style={{ color: '#FFD700' }} />,
-      value: 'Pro Plan',
-      label: '3 Signals/Day',
+      value: `${planLabel} Plan`,
+      label: `${planLimit} Signals/Day`,
       color: '#FFD700',
-      delta: 'Upgrade to VIP for 5',
+      delta: profile.plan === 'vip' ? 'Unlimited voice alerts' : 'Upgrade to VIP for 5',
       deltaColor: '#00E5FF',
     },
   ]
@@ -992,7 +889,7 @@ function TodaySummary() {
 }
 
 // ── Section 5: Trading Journal ──────────────────────────────
-function TradingJournal() {
+function TradingJournal({ journalEntries }: { journalEntries: JournalEntry[] }) {
   return (
     <section className="w-full bg-[#0A0A0A] pt-16 pb-32">
       <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
@@ -1014,7 +911,7 @@ function TradingJournal() {
             className="text-xs text-[#5A5E66] tracking-[0.02em]"
             style={{ fontFamily: "'Inter', sans-serif" }}
           >
-            Last 10 Signals
+            Last {journalEntries.length} Signals
           </span>
         </motion.div>
 
@@ -1030,7 +927,7 @@ function TradingJournal() {
             const isWin = entry.result === 'WIN'
             return (
               <motion.div
-                key={`${entry.asset}-${i}`}
+                key={entry.id || `${entry.asset}-${i}`}
                 variants={staggerItem}
                 custom={i}
                 whileHover={{ backgroundColor: '#1A1A1A' }}
@@ -1128,24 +1025,12 @@ function TradingJournal() {
 }
 
 // ── Voice Call Section ────────────────────────────────────
-function VoiceCallSection() {
-  const [calls, setCalls] = useState([
-    {
-      id: '1',
-      asset: 'XAUUSD',
-      status: 'completed',
-      mode: 'tts',
-      recording_url: 'https://example.com/audio1.mp3',
-      transcript: 'SignalVault VIP Alert. Gold. Buy signal...',
-      created_at: '2024-01-15T09:00:00Z',
-    },
-  ])
+function VoiceCallSection({ calls, isVip }: { calls: VoiceCall[]; isVip: boolean }) {
   const [isPlaying, setIsPlaying] = useState<string | null>(null)
   const [phoneNumber, setPhoneNumber] = useState('')
-  const [isVip] = useState(true) // TODO: check from auth
   const [isCalling, setIsCalling] = useState(false)
 
-  const handlePlay = (url: string, id: string) => {
+  const handlePlay = (_url: string, id: string) => {
     if (isPlaying === id) {
       setIsPlaying(null)
     } else {
@@ -1295,7 +1180,7 @@ function VoiceCallSection() {
                     <div className="flex items-center gap-2">
                       {call.recording_url && (
                         <button
-                          onClick={() => handlePlay(call.recording_url, call.id)}
+                          onClick={() => handlePlay(call.recording_url!, call.id)}
                           className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1A1A1A] text-[#00E5FF] transition-all hover:bg-[#00E5FF]/10"
                         >
                           {isPlaying === call.id ? <Pause size={14} /> : <Play size={14} />}
@@ -1348,14 +1233,46 @@ function CompactFooter() {
 export default function Dashboard() {
   useLoadFonts()
 
+  const { signals, positions, journalEntries, profile, calls, timelineSlots, loading, error } =
+    useDashboardData()
+
+  if (loading) {
+    return (
+      <div className="min-h-[100dvh] bg-[#050505] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            className="w-8 h-8 border-2 border-[#00E5FF] border-t-transparent rounded-full"
+          />
+          <p className="text-sm text-[#5A5E66]" style={{ fontFamily: "'Inter', sans-serif" }}>
+            Loading dashboard...
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[100dvh] bg-[#050505] flex items-center justify-center px-6">
+        <p className="text-center text-[#FF3366]" style={{ fontFamily: "'Inter', sans-serif" }}>
+          {error}
+        </p>
+      </div>
+    )
+  }
+
+  const isVip = profile.plan === 'vip'
+
   return (
     <div className="min-h-[100dvh] bg-[#050505]">
-      <DashboardHeader />
-      <SignalTimeline />
-      <ActiveTrades />
-      <TodaySummary />
-      <TradingJournal />
-      <VoiceCallSection />
+      <DashboardHeader profile={profile} timelineSlots={timelineSlots} />
+      <SignalTimeline signals={signals} />
+      <ActiveTrades positions={positions} />
+      <TodaySummary signals={signals} journalEntries={journalEntries} profile={profile} />
+      <TradingJournal journalEntries={journalEntries} />
+      <VoiceCallSection calls={calls} isVip={isVip} />
       <CompactFooter />
     </div>
   )
