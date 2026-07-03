@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { ArrowRight } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { supabase } from '@/lib/supabase'
+import { Skeleton } from '@/components/ui/skeleton'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -17,17 +19,39 @@ interface SignalData {
   risk: 'LOW' | 'MEDIUM' | 'HIGH'
 }
 
-const signals: SignalData[] = [
-  { asset: 'EUR/USD', type: 'BUY', time: '09:00 GMT', entry: '1.0842', stopLoss: '1.0820', takeProfit: '1.0885', confidence: 92, risk: 'LOW' },
-  { asset: 'GBP/JPY', type: 'SELL', time: '11:30 GMT', entry: '192.45', stopLoss: '193.10', takeProfit: '191.20', confidence: 88, risk: 'MEDIUM' },
-  { asset: 'BTC/USD', type: 'BUY', time: '14:00 GMT', entry: '67,240', stopLoss: '66,800', takeProfit: '68,500', confidence: 85, risk: 'MEDIUM' },
-  { asset: 'XAU/USD (Gold)', type: 'BUY', time: '16:30 GMT', entry: '2,342.50', stopLoss: '2,335.00', takeProfit: '2,358.00', confidence: 94, risk: 'LOW' },
-  { asset: 'USD/CAD', type: 'SELL', time: '19:00 GMT', entry: '1.3680', stopLoss: '1.3710', takeProfit: '1.3620', confidence: 79, risk: 'MEDIUM' },
-]
+interface DbSignal {
+  id: string
+  asset: string
+  asset_name: string
+  direction: 'buy' | 'sell'
+  entry_price: number
+  stop_loss: number
+  take_profit: number
+  confidence: number
+  created_at: string
+}
+
+function formatPrice(n: number): string {
+  if (n >= 1000) {
+    return n.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  }
+  return n.toFixed(4)
+}
+
+function riskFromConfidence(c: number): 'LOW' | 'MEDIUM' | 'HIGH' {
+  if (c >= 85) return 'LOW'
+  if (c >= 60) return 'MEDIUM'
+  return 'HIGH'
+}
 
 function SignalCard({ signal }: { signal: SignalData }) {
   const isBuy = signal.type === 'BUY'
-  const riskColor = signal.risk === 'LOW' ? 'text-[#00F0A0]' : signal.risk === 'MEDIUM' ? 'text-[#FFD700]' : 'text-[#FF3366]'
+  const riskColor =
+    signal.risk === 'LOW'
+      ? 'text-[#00F0A0]'
+      : signal.risk === 'MEDIUM'
+        ? 'text-[#FFD700]'
+        : 'text-[#FF3366]'
 
   return (
     <div className="w-full rounded-[16px] border border-[#222222] bg-[#111111] p-6 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:border-[rgba(0,229,255,0.2)] hover:shadow-card-hover">
@@ -48,8 +72,12 @@ function SignalCard({ signal }: { signal: SignalData }) {
         <div className="flex items-center gap-2">
           <span className="font-mono text-[13px] text-[#5A5E66]">{signal.time}</span>
           <span className="relative flex h-2 w-2">
-            <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isBuy ? 'bg-[#00F0A0]' : 'bg-[#FF3366]'}`}></span>
-            <span className={`relative inline-flex h-2 w-2 rounded-full ${isBuy ? 'bg-[#00F0A0]' : 'bg-[#FF3366]'}`}></span>
+            <span
+              className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isBuy ? 'bg-[#00F0A0]' : 'bg-[#FF3366]'}`}
+            ></span>
+            <span
+              className={`relative inline-flex h-2 w-2 rounded-full ${isBuy ? 'bg-[#00F0A0]' : 'bg-[#FF3366]'}`}
+            ></span>
           </span>
         </div>
       </div>
@@ -58,7 +86,9 @@ function SignalCard({ signal }: { signal: SignalData }) {
       <div className="mt-4 grid grid-cols-3 gap-4">
         <div>
           <p className="mb-1 text-[12px] font-medium tracking-wide text-[#5A5E66]">Entry</p>
-          <p className={`font-mono text-[16px] ${isBuy ? 'text-[#00F0A0]' : 'text-[#F0F0F0]'}`}>{signal.entry}</p>
+          <p className={`font-mono text-[16px] ${isBuy ? 'text-[#00F0A0]' : 'text-[#F0F0F0]'}`}>
+            {signal.entry}
+          </p>
         </div>
         <div>
           <p className="mb-1 text-[12px] font-medium tracking-wide text-[#5A5E66]">Stop Loss</p>
@@ -66,7 +96,9 @@ function SignalCard({ signal }: { signal: SignalData }) {
         </div>
         <div>
           <p className="mb-1 text-[12px] font-medium tracking-wide text-[#5A5E66]">Take Profit</p>
-          <p className={`font-mono text-[16px] ${isBuy ? 'text-[#00F0A0]' : 'text-[#F0F0F0]'}`}>{signal.takeProfit}</p>
+          <p className={`font-mono text-[16px] ${isBuy ? 'text-[#00F0A0]' : 'text-[#F0F0F0]'}`}>
+            {signal.takeProfit}
+          </p>
         </div>
       </div>
 
@@ -91,17 +123,68 @@ function SignalCard({ signal }: { signal: SignalData }) {
 }
 
 export default function LiveSignalsPreview() {
+  const [signals, setSignals] = useState<SignalData[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
+    let cancelled = false
+
+    async function fetchSignals() {
+      setLoading(true)
+      setError(null)
+
+      const { data, error: fetchError } = await supabase
+        .from('signals')
+        .select('id, asset, asset_name, direction, entry_price, stop_loss, take_profit, confidence, created_at')
+        .order('created_at', { ascending: false })
+        .limit(5)
+
+      if (cancelled) return
+
+      if (fetchError) {
+        setError(fetchError.message)
+        setSignals([])
+      } else {
+        const mapped: SignalData[] =
+          (data as DbSignal[] | null)?.map((s) => ({
+            asset: s.asset_name || s.asset,
+            type: s.direction.toUpperCase() as 'BUY' | 'SELL',
+            time: `${new Date(s.created_at).toLocaleTimeString('en-GB', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })} GMT`,
+            entry: formatPrice(Number(s.entry_price)),
+            stopLoss: formatPrice(Number(s.stop_loss)),
+            takeProfit: formatPrice(Number(s.take_profit)),
+            confidence: s.confidence,
+            risk: riskFromConfidence(s.confidence),
+          })) || []
+        setSignals(mapped)
+      }
+
+      setLoading(false)
+    }
+
+    fetchSignals()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!sectionRef.current || signals.length === 0) return
+
     const ctx = gsap.context(() => {
       gsap.from(headerRef.current, {
         y: 30,
         opacity: 0,
         duration: 0.6,
-        ease: "expo.out",
+        ease: 'expo.out',
         scrollTrigger: {
           trigger: headerRef.current,
           start: 'top 85%',
@@ -116,7 +199,7 @@ export default function LiveSignalsPreview() {
           opacity: 0,
           duration: 0.5,
           delay: i * 0.12,
-          ease: "expo.out",
+          ease: 'expo.out',
           scrollTrigger: {
             trigger: card,
             start: 'top 85%',
@@ -127,7 +210,7 @@ export default function LiveSignalsPreview() {
     }, sectionRef)
 
     return () => ctx.revert()
-  }, [])
+  }, [signals])
 
   return (
     <section ref={sectionRef} className="w-full bg-[#050505] py-24 lg:py-32">
@@ -135,7 +218,7 @@ export default function LiveSignalsPreview() {
         {/* Section Header */}
         <div ref={headerRef} className="mb-12">
           <p className="mb-3 text-[12px] font-medium uppercase tracking-[0.1em] text-[#00F0A0]">
-            Today's Signals
+            Today&apos;s Signals
           </p>
           <h2 className="mb-3 text-[clamp(32px,3.5vw,48px)] font-bold leading-[1.1] tracking-[-0.02em] text-[#F0F0F0]">
             Precision Signals. Zero Guesswork.
@@ -147,11 +230,24 @@ export default function LiveSignalsPreview() {
 
         {/* Signal Cards */}
         <div className="mx-auto flex max-w-[900px] flex-col gap-4">
-          {signals.map((signal, i) => (
-            <div key={signal.asset} ref={(el) => { cardsRef.current[i] = el }}>
-              <SignalCard signal={signal} />
+          {loading &&
+            Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-[180px] w-full rounded-[16px]" />
+            ))}
+
+          {!loading && error && (
+            <div className="rounded-[16px] border border-[#222222] bg-[#111111] p-6 text-center text-sm text-[#FF3366]">
+              Could not load signals: {error}
             </div>
-          ))}
+          )}
+
+          {!loading &&
+            !error &&
+            signals.map((signal, i) => (
+              <div key={signal.asset + signal.time} ref={(el) => { cardsRef.current[i] = el }}>
+                <SignalCard signal={signal} />
+              </div>
+            ))}
         </div>
 
         {/* CTA Row */}
