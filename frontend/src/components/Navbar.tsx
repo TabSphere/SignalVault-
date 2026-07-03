@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
 import { Menu, X, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useProfile, type UserPlan } from '@/hooks/useProfile'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const navLinks = [
   { label: 'Dashboard', path: '/dashboard' },
@@ -10,6 +12,34 @@ const navLinks = [
   { label: 'Credits', path: '/credits' },
   { label: 'Referrals', path: '/referrals' },
 ]
+
+function PlanBadge() {
+  const { profile, loading } = useProfile()
+
+  if (loading) {
+    return <Skeleton className="h-6 w-14 rounded-full" />
+  }
+
+  if (!profile) return null
+
+  const planColors: Record<UserPlan, { bg: string; text: string; border: string }> = {
+    standard: { bg: 'bg-[#5A5E66]/10', text: 'text-[#8A8F98]', border: 'border-[#5A5E66]/20' },
+    pro: { bg: 'bg-[#00E5FF]/10', text: 'text-[#00E5FF]', border: 'border-[#00E5FF]/20' },
+    vip: { bg: 'bg-[#FFD700]/10', text: 'text-[#FFD700]', border: 'border-[#FFD700]/20' },
+  }
+
+  const plan = profile.plan
+  const colors = planColors[plan] || planColors.standard
+  const label = plan.charAt(0).toUpperCase() + plan.slice(1)
+
+  return (
+    <span
+      className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider ${colors.bg} ${colors.text} ${colors.border}`}
+    >
+      {label}
+    </span>
+  )
+}
 
 function CreditBalance() {
   const [credits] = useState(5)
@@ -86,6 +116,7 @@ export default function Navbar() {
 
         {/* Right CTA - Desktop */}
         <div className="hidden items-center gap-4 md:flex">
+          <PlanBadge />
           <CreditBalance />
           <Link
             to="/start"

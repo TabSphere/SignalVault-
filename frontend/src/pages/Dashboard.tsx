@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 
 import { VoiceCallWidget } from '@/components/VoiceCallWidget'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   useDashboardData,
   type Signal,
@@ -1207,6 +1208,81 @@ function VoiceCallSection({ calls, isVip }: { calls: VoiceCall[]; isVip: boolean
   )
 }
 
+// ── Dashboard Loading Skeleton ──────────────────────────────
+function DashboardSkeleton() {
+  return (
+    <div className="min-h-[100dvh] bg-[#050505]">
+      {/* Header skeleton */}
+      <section className="w-full bg-[#050505] pt-[96px] pb-8">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="space-y-2">
+              <Skeleton className="h-10 w-64" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <Skeleton className="h-24 w-40 rounded-xl" />
+          </div>
+          <div className="flex gap-2 mt-8">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="flex-1 h-24 rounded-xl" />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Signals skeleton */}
+      <section className="w-full bg-[#050505] py-8 pb-16">
+        <div className="max-w-[900px] mx-auto px-6 lg:px-12 space-y-4">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-40 w-full rounded-xl" />
+          <Skeleton className="h-64 w-full rounded-xl" />
+        </div>
+      </section>
+
+      {/* Positions skeleton */}
+      <section className="w-full bg-[#0A0A0A] py-12">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
+          <Skeleton className="h-8 w-48 mb-6" />
+          <Skeleton className="h-12 w-full mb-3" />
+          <Skeleton className="h-16 w-full mb-3" />
+          <Skeleton className="h-16 w-full" />
+        </div>
+      </section>
+
+      {/* Stats skeleton */}
+      <section className="w-full bg-[#050505] py-8">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12 grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-40 rounded-xl" />
+          ))}
+        </div>
+      </section>
+
+      {/* Journal skeleton */}
+      <section className="w-full bg-[#0A0A0A] pt-16 pb-32">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
+          <Skeleton className="h-8 w-48 mb-6" />
+          <div className="space-y-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-20 w-full rounded-xl" />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Voice skeleton */}
+      <section className="w-full bg-[#0A0A0A] py-12">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
+          <Skeleton className="h-8 w-40 mb-6" />
+          <Skeleton className="h-48 w-full rounded-xl" />
+        </div>
+      </section>
+
+      <CompactFooter />
+    </div>
+  )
+}
+
 // ── Compact Footer ──────────────────────────────────────────
 function CompactFooter() {
   return (
@@ -1237,20 +1313,7 @@ export default function Dashboard() {
     useDashboardData()
 
   if (loading) {
-    return (
-      <div className="min-h-[100dvh] bg-[#050505] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-            className="w-8 h-8 border-2 border-[#00E5FF] border-t-transparent rounded-full"
-          />
-          <p className="text-sm text-[#5A5E66]" style={{ fontFamily: "'Inter', sans-serif" }}>
-            Loading dashboard...
-          </p>
-        </div>
-      </div>
-    )
+    return <DashboardSkeleton />
   }
 
   if (error) {

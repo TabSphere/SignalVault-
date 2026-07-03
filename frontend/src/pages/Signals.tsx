@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, ArrowDownRight, Loader2, AlertCircle } from 'lucide-react'
+import { ArrowUpRight, ArrowDownRight, AlertCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface Signal {
   id: string
@@ -71,9 +72,10 @@ export default function Signals() {
         </motion.div>
 
         {loading && (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-[#00E5FF]" />
-            <span className="ml-3 text-sm text-[#8A8F98]">Loading signals...</span>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="h-80 rounded-xl" />
+            ))}
           </div>
         )}
 
