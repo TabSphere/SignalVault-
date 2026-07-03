@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router'
 import { Menu, X, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -43,13 +43,8 @@ function PlanBadge() {
 
 function CreditBalance() {
   const [credits] = useState(5)
-  const [isLow, setIsLow] = useState(false)
-  const [isCritical, setIsCritical] = useState(false)
-
-  useEffect(() => {
-    setIsLow(credits > 0 && credits <= 10)
-    setIsCritical(credits <= 3)
-  }, [credits])
+  const isLow = credits > 0 && credits <= 10
+  const isCritical = credits <= 3
 
   return (
     <Link to="/credits" className="flex items-center gap-1.5">

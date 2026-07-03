@@ -284,9 +284,9 @@ export function useDashboardData(): UseDashboardDataResult {
         setDbJournal(fetchedJournal)
         setDbProfile(fetchedProfile)
         setDbCalls(fetchedCalls)
-      } catch (err: any) {
+      } catch (err) {
         if (!cancelled) {
-          setError(err?.message || 'Failed to load dashboard data')
+          setError(err instanceof Error ? err.message : 'Failed to load dashboard data')
         }
       } finally {
         if (!cancelled) {
